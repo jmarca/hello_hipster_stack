@@ -3,7 +3,7 @@
 The Hipster Stack!
 ==================
 
-This post describes my version of the Elm hipster stack. The original
+This repo describes my version of the Elm hipster stack. The original
 setup I found is located on github at
 [carleryd/elm-hipster-stack](https://github.com/carleryd/elm-hipster-stack). I
 had trouble with that version out of the box, because it wasn’t
@@ -439,7 +439,7 @@ Switching over to your browser, you should see the new message without having to
 
 # Conclusion
 
-I hope this works for you.  It will undoubtedly go out of date, like all hipster fashions, but if you're interested in Elm and Elixir, I hope this post gets you on your way with the latest and greatest.
+I hope this works for you.  It will undoubtedly go out of date, like all hipster fashions, but if you're interested in Elm and Elixir, I hope this repo gets you on your way with the latest and greatest.
 
 # What Phoenix said
 
