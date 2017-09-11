@@ -441,6 +441,7 @@ Switching over to your browser, you should see the new message without having to
 
 I hope this works for you.  It will undoubtedly go out of date, like all hipster fashions, but if you're interested in Elm and Elixir, I hope this post gets you on your way with the latest and greatest.
 
+# What Phoenix said
 
 To start your Phoenix server:
 
