@@ -28,3 +28,4 @@ npm-debug.log
 assets/js/elm.js
 **/elm-stuff
 *~
+**/.tern-port
