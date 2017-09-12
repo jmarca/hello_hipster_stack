@@ -9,7 +9,7 @@ defmodule HelloHipsterStackWeb.UserView do
     }
   end
 
-  def render("user.json", %{user: user}) do
+  def render("show.json", %{data: user}) do
     %{data: user_json(user) }
   end
 

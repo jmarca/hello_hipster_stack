@@ -14,4 +14,16 @@ defmodule HelloHipsterStackWeb.ErrorView do
   def template_not_found(_template, assigns) do
     render "500.html", assigns
   end
+
+  def render("400.json", %{reason: reason}) do
+    message = case reason do
+                %Phoenix.Router.NoRouteError{} -> "Route not found"
+                %Ecto.NoResultsError{} -> "Resource not found"
+                %Ecto.CastError{} -> "Bad Request"
+                "I'm afraid I can't do that, " <> _display_name -> reason
+                _ -> "Uncaught exception"
+              end
+    %{errors: message}
+  end
+
 end

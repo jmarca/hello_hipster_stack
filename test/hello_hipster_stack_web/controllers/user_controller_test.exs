@@ -41,8 +41,32 @@ defmodule HelloHipsterStackWeb.UserControllerTest do
   end
 
   describe "show/2" do
-    test "Responds with a newly created user if the user is found"
-    test "Responds with a message indicating user not found"
+    test "Responds with a newly created user if the user is found", %{conn: conn, user: user} do
+      response = conn
+      |> get(user_path(conn, :show, user.id))
+      |> json_response(200)
+
+      expected = %{
+        "data" =>
+        %{ "email" => user.email, "display_name" => user.display_name }
+
+      }
+
+      assert response == expected
+    end
+
+    test "Responds with a message indicating user not found", %{conn: conn} do
+      response = conn
+      |> get(user_path(conn, :show, -1 ))
+      |> json_response(400)
+
+      expected = %{
+        "errors" => "Resource not found"
+      }
+
+      assert response == expected
+    end
+
   end
 
   describe "update/2" do
