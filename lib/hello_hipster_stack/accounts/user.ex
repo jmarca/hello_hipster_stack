@@ -2,6 +2,7 @@ defmodule HelloHipsterStack.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias HelloHipsterStack.Accounts.User
+  require Logger
 
   @schema_prefix "accounts"
 

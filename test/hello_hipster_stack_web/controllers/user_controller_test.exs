@@ -10,7 +10,7 @@ defmodule HelloHipsterStackWeb.UserControllerTest do
 
   @update_attrs %{email: "falada@horsehead.org", display_name: "goose girl", password: "covered in tar and feathers"}
 
-  @bad_attrs %{}
+  @bad_attrs %{email: "", display_name: ""}
 
   setup do
     {:ok, user} = Accounts.create_user(@user1_attrs)
@@ -33,11 +33,6 @@ defmodule HelloHipsterStackWeb.UserControllerTest do
 
     assert response == expected
 
-  end
-
-  describe "create/2" do
-    test "Creates, and responds with a newly created user if attributes are valid"
-    test "Returns an error and does not create a user if attributes are invalid"
   end
 
   describe "show/2" do
@@ -70,9 +65,51 @@ defmodule HelloHipsterStackWeb.UserControllerTest do
   end
 
   describe "update/2" do
-    test "Edits, and responds with the user if attributes are valid"
-    test "Returns an error and does not edit the user if attributes are invalid"
+    setup do
+      {:ok, user2} = Accounts.create_user(@user2_attrs)
+      {:ok, user2: user2}
+    end
+
+    test "Edits, and responds with the user if attributes are valid", %{conn: conn, user2: user} do
+      response = conn
+      |> put(user_path(conn, :update, user.id ), data: %{ attributes: @update_attrs } )
+      |> json_response(200)
+
+      expected = %{
+        "data" =>
+        %{ "email" => @update_attrs.email, "display_name" => @update_attrs.display_name }
+      }
+      assert response == expected
+    end
+    test "Returns the unmodified user if attributes object is empty", %{conn: conn, user: user} do
+
+      response = conn
+      |>put( user_path(conn, :update, user.id ), data: %{ attributes: %{} } )
+      |> json_response(200)
+
+      expected = %{
+        "data" =>
+        %{ "email" => user.email, "display_name" => user.display_name }
+      }
+      assert response == expected
+
+    end
+    test "Returns an error and does not edit the user if attributes are invalid", %{conn: conn, user: user} do
+
+      response = put conn, user_path(conn, :update, user.id ), data: %{ attributes: @bad_attrs }
+      assert json_response(response, 422)["errors"] == %{
+        "display_name" => ["can't be blank"],
+        "email" => ["can't be blank"]
+      }
+
+    end
   end
+
+  describe "create/2" do
+    test "Creates, and responds with a newly created user if attributes are valid"
+    test "Returns an error and does not create a user if attributes are invalid"
+  end
+
 
   test "delete/2 and responds with :ok if the user was deleted"
 
