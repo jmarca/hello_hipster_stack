@@ -96,8 +96,11 @@ defmodule HelloHipsterStackWeb.UserControllerTest do
     end
     test "Returns an error and does not edit the user if attributes are invalid", %{conn: conn, user: user} do
 
-      response = put conn, user_path(conn, :update, user.id ), data: %{ attributes: @bad_attrs }
-      assert json_response(response, 422)["errors"] == %{
+      response = conn
+        |> put( user_path(conn, :update, user.id ), data: %{ attributes: @bad_attrs })
+        |> json_response(422)
+
+      assert response["errors"] == %{
         "display_name" => ["can't be blank"],
         "email" => ["can't be blank"]
       }
