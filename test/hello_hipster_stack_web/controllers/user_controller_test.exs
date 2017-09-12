@@ -104,13 +104,44 @@ defmodule HelloHipsterStackWeb.UserControllerTest do
         "display_name" => ["can't be blank"],
         "email" => ["can't be blank"]
       }
-
+      # by the way, will crash if attributes are set to nil (not a hash)
     end
   end
 
   describe "create/2" do
-    test "Creates, and responds with a newly created user if attributes are valid"
-    test "Returns an error and does not create a user if attributes are invalid"
+    test "Creates, and responds with a newly created user if attributes are valid", %{conn: conn} do
+      response = conn
+      |> post( user_path(conn, :create), data: %{ attributes: @user2_attrs } )
+      |> json_response(201)
+      assert( response["data"] == %{"email"=> @user2_attrs.email,
+                                   "display_name" => @user2_attrs.display_name}
+      )
+
+    end
+
+    test "Cannot create a user with a duplicate email", %{conn: conn, user: user} do
+      response = conn
+      |> post( user_path(conn, :create), data: %{ attributes: %{"email" => user.email,
+                                                               "display_name" => @user2_attrs.display_name,
+                                                               "password" => @user2_attrs.password} } )
+      |> json_response(422)
+      assert( response["errors"] == %{"email"=>  ["has already been taken"]} )
+
+    end
+
+    test "Returns an error and does not create a user if attributes are invalid", %{conn: conn} do
+      response = conn
+      |> post( user_path(conn, :create), data: %{ attributes: @bad_attrs })
+      |> json_response(422)
+      assert( response["errors"] == %{
+        "display_name" => ["can't be blank"],
+        "email" => ["can't be blank"],
+        "password" => ["can't be blank"] }
+        )
+
+
+    end
+
   end
 
 

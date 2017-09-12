@@ -11,6 +11,29 @@ defmodule HelloHipsterStackWeb.UserController do
     render(conn, "index.json", data: users)
   end
 
+  def create(conn, %{"data" => %{"attributes" => user_params}}) do
+    # try block to catch bad params
+    try do
+      case Accounts.create_user(user_params) do
+        {:ok, user} ->
+          conn
+          |> put_status(:created)
+          |> put_resp_header("location", user_path(conn, :show, user))
+          |> render("show.json", data: user)
+
+        {:error, %Ecto.Changeset{} = changeset} ->
+          conn
+          |> put_status(:unprocessable_entity)
+          |> render( HelloHipsterStackWeb.ErrorView, "error.json", changeset: changeset)
+      end
+    catch
+      :error, message ->
+        conn
+        |> put_status(:bad_request)
+        |> render( HelloHipsterStackWeb.ErrorView, "400.json", reason: message)
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     try do
       user = Accounts.get_user!(id)
